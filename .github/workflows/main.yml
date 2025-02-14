@@ -1,0 +1,26 @@
+name: Update LeetCode Stats
+
+on:
+  schedule:
+    - cron: "0 0 * * *"  # Runs once a day at midnight UTC
+  workflow_dispatch:  # Allows manual trigger
+
+jobs:
+  update-leetcode:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Update README
+        run: |
+          curl -s "https://leetcard.jacoblin.cool/GrubbyPhantom?theme=dark&font=Monospace" -o leetcode.png
+          echo '![](leetcode.png)' > README.md
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add README.md leetcode.png
+          git commit -m "Updated LeetCode stats"
+          git push
